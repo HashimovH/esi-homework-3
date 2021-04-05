@@ -82,10 +82,15 @@ func Router() *mux.Router {
 	plantmService := service.NewPlantmService(plantmRepository)
 	plantmHTTPHandler := http2.NewPlantmHandler(plantmService)
 
+	orderRepository := repository.NewOrderRepository(dbConn)
+	orderService := handler.OrderService(orderRepository)
+	orderHTTPHandler := http2.orderHandler(orderService)
+
 
 	router := mux.NewRouter()
 	plantHTTPHandler.RegisterRoutes(router)
 	plantmHTTPHandler.RegisterRoutes(router)
+	orderHTTPHandler.RegisterRoutes(router)
 
 	return router
 
