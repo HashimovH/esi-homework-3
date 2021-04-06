@@ -83,8 +83,8 @@ func Router() *mux.Router {
 	plantmHTTPHandler := http2.NewPlantmHandler(plantmService)
 
 	orderRepository := repository.NewOrderRepository(dbConn)
-	orderService := handler.OrderService(orderRepository)
-	orderHTTPHandler := http2.orderHandler(orderService)
+	orderService := service.NewOrderService(orderRepository)
+	orderHTTPHandler := http2.OrderStatusHandler(orderService)
 
 
 	router := mux.NewRouter()

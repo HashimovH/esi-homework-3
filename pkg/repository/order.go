@@ -5,24 +5,26 @@ import (
 	"fmt"
 )
 
-type OrderRepository struct {
+type orderRepository struct {
 	db *sql.DB
 }
 
-func NewOrderRepository(db *sql.DB) *OrderRepository {
-	return &OrderRepository{
+func NewOrderRepository(db *sql.DB) *orderRepository {
+	return &orderRepository{
 		db: db,
 	}
 }
 
-func (r *OrderRepository) GetNumIntersects(ident string, start string, end string) (string, error) {
+func (r *orderRepository) GetStatus(ident string, start string, end string) (int, error) {
 	query := "SELECT COUNT(*) FROM porder WHERE ident_order=$1 AND ((start_order>$2 AND start_order<$3) OR (end_order>$2 AND end_order<$3))"
 	row := r.db.QueryRow(query, ident, start, end)
 	
-	var num string
+	num := 0
+	
 	err := row.Scan(&num)
+	fmt.Println(num)
 	if err != nil {
-		return "5", fmt.Errorf("could not close rows, err %v", err)
+		return 0, fmt.Errorf("could not close rows, err %v", err)
 	}
 
 	return num, nil

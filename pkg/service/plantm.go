@@ -13,7 +13,7 @@ import (
 type plantmRepository interface {
 	Create(s *domain.Plantm) (*domain.Plantm, error)
 	GetAll() ([]*domain.Plantm, error)
-	// GetOne() (*domain.Plantm, error)
+	GetOne() (*domain.Plantm, error)
 }
 
 type PlantmService struct{
@@ -38,10 +38,10 @@ func (s *PlantmService) GetAll() ([]*domain.Plantm, error){
 	return plants, err
 }
 
-// func (s *PlantmService) GetOne() (*domain.Plantm, error){
-// 	plant, err := s.plantmRepository.GetOne()
-// 	if err != nil{
-// 		return nil, err
-// 	}
-// 	return plant, err
-// }
+func (s *PlantmService) GetOne() (*domain.Plantm, error){
+	plant, err := s.plantmRepository.GetOne()
+	if err != nil{
+		return nil, err
+	}
+	return plant, err
+}
