@@ -16,7 +16,7 @@ type plantRepository interface {
 	// cacheRepository  *repository.CacheRepository
 	Create(s *domain.Plant) (*domain.Plant, error)
 	GetAll() ([]*domain.Plant, error)
-	// GetOne() (*domain.Plant, error)
+	GetOne(ident string) (*domain.Plant, error)
 }
 
 type PlantService struct{
@@ -41,10 +41,61 @@ func (s *PlantService) GetAll() ([]*domain.Plant, error){
 	return plants, err
 }
 
-// func (s *PlantService) GetOne() (*domain.Plant, error){
-// 	plant, err := s.plantRepository.GetOne()
-// 	if err != nil{
-// 		return nil, err
+func (s *PlantService) GetOne(ident string) (*domain.Plant, error){
+	plant, err := s.plantRepository.GetOne(ident)
+	if err != nil{
+		return nil, err
+	}
+	return plant, err
+}
+
+
+
+// func (h *PlantHandler) GetPrice(w http.ResponseWriter, r *http.Request) {
+// 	log.Printf("received request %v", r)
+// 	req_cache := r
+// 	var data map[string]interface{}
+// 	err := json.NewDecoder(r.Body).Decode(&data)
+// 	if err != nil {
+// 		http.Error(w, err.Error(), http.StatusInternalServerError)
+// 		return
 // 	}
-// 	return plant, err
+// 	i := data["ident"].(string)
+// 	if err != nil {
+// 		http.Error(w, err.Error(), http.StatusInternalServerError)
+// 		return
+// 	}
+// 	start, _ := strconv.Atoi(data["start"].(string))
+// 	end, _ := strconv.Atoi(data["end"].(string))
+// 	price, err := h.plantRepository.GetOne(i)
+// 	p, _ := strconv.Atoi(price)
+// 	if err != nil {
+// 		price, err := h.plantmRepository.GetOne(i)
+// 		p, _ := strconv.Atoi(price)
+// 		if err != nil {
+// 			http.Error(w, err.Error(), http.StatusInternalServerError)
+// 			return
+// 		}
+// 		res := &domain.Cost{Ident: i, Price: strconv.Itoa(p * (end - start))} //// calculating perdiod mult by price
+// 		w.WriteHeader(http.StatusOK)
+// 		err = json.NewEncoder(w).Encode(&res)
+// 		if err != nil {
+// 			http.Error(w, err.Error(), http.StatusInternalServerError)
+// 		}
+// 		return
+// 	}
+// 	s := strconv.Itoa(p * (end - start))
+// 	res := &domain.Cost{Ident: i, Price: s}
+// 	w.WriteHeader(http.StatusOK)
+// 	err = json.NewEncoder(w).Encode(&res)
+// 	if err != nil {
+// 		http.Error(w, err.Error(), http.StatusInternalServerError)
+// 	}
+// 	_, err = h.CacheRequest(req_cache)
+// 	//w.Write([]byte(answer))
+// 	if err != nil {
+// 		http.Error(w, err.Error(), http.StatusInternalServerError)
+// 		return
+// 	}
+
 // }

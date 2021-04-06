@@ -8,15 +8,15 @@ import (
 	"net/http"
 )
 
-type NewOrderService interface {
-	GetAll() (*domain.Order, error)
+type OrderService interface {
+	GetStatus(i string, s string, e string) (int, error)
 }
 
 type orderHandler struct {
-	NewOrderService NewOrderService
+	OrderService OrderService
 }
 
-func OrderStatusHandler(pS NewOrderService) *orderHandler {
+func OrderStatusHandler(pS OrderService) *orderHandler {
 	return &orderHandler{
 		OrderService: pS,
 	}
@@ -26,19 +26,44 @@ func (h *orderHandler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/status", h.GetStatus).Methods(http.MethodPost)
 }
 
-func (h *orderHandler) GetStatus(w http.ResponseWriter, _ *http.Request) {
-	status, err := h.OrderService.GetStatus()
+func (h *orderHandler) GetStatus(w http.ResponseWriter, r *http.Request) {
+	
+	var data map[string]interface{}
+	err := json.NewDecoder(r.Body).Decode(&data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	i := data["ident"].(string)
+	s := data["start"].(string)
+	e := data["end"].(string)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	status, err := h.OrderService.GetStatus(i, s, e)
 	if err != nil {
 		log.Error(err.Error())
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	// write success response
-	w.WriteHeader(http.StatusOK)
-	err = json.NewEncoder(w).Encode(&status)
-	if err != nil {
-		log.Errorf("Could not encode json, err %v", err)
+	if status == 0{
+		response := &domain.Check{Availability: "not available"}
+		w.WriteHeader(http.StatusOK)
+		err = json.NewEncoder(w).Encode(&response)
+		if err != nil {
+			log.Errorf("Could not encode json, err %v", err)
+		}
+	}else{
+		response := &domain.Check{Availability: "available"}
+		w.WriteHeader(http.StatusOK)
+		err = json.NewEncoder(w).Encode(&response)
+		if err != nil {
+			log.Errorf("Could not encode json, err %v", err)
+		}
 	}
+	
 }
 
 
