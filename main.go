@@ -10,9 +10,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"net/http"
-	"github.com/HashimovH/homework3/pkg/repository"
-	"github.com/HashimovH/homework3/pkg/service"
-	http2 "github.com/HashimovH/homework3/pkg/transport/http"
+	"github.com/HashimovH/esi-homework-3/pkg/repository"
+	"github.com/HashimovH/esi-homework-3/pkg/service"
+	http2 "github.com/HashimovH/esi-homework-3/pkg/transport/http"
 	// "github.com/graphql-go/graphql"
 	// "github.com/HashimovH/homework3/pkg/handler/graphql/schema"
 	// SQL driver
@@ -78,9 +78,9 @@ func Router() *mux.Router {
 	plantService := service.NewPlantService(plantRepository)
 	plantHTTPHandler := http2.NewPlantHandler(plantService)
 
-	plantmRepository := repository.NewPlantmRepository(dbConn2)
-	plantmService := service.NewPlantmService(plantmRepository)
-	plantmHTTPHandler := http2.NewPlantmHandler(plantmService)
+	//plantmRepository := repository.NewPlantmRepository(dbConn2)
+	//plantmService := service.NewPlantmService(plantmRepository)
+	//plantmHTTPHandler := http2.NewPlantmHandler(plantmService)
 
 	orderRepository := repository.NewOrderRepository(dbConn)
 	orderService := service.NewOrderService(orderRepository)
@@ -89,7 +89,7 @@ func Router() *mux.Router {
 
 	router := mux.NewRouter()
 	plantHTTPHandler.RegisterRoutes(router)
-	plantmHTTPHandler.RegisterRoutes(router)
+	//plantmHTTPHandler.RegisterRoutes(router)
 	orderHTTPHandler.RegisterRoutes(router)
 
 	return router

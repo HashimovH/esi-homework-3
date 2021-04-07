@@ -3,7 +3,7 @@ package service
 import (
 	// "encoding/json"
 	// "fmt"
-	"github.com/HashimovH/homework3/pkg/domain"
+	"github.com/HashimovH/esi-homework-3/pkg/domain"
 	// "io/ioutil"
 	// "log"
 	// "net/http"
@@ -16,7 +16,7 @@ type plantRepository interface {
 	// cacheRepository  *repository.CacheRepository
 	Create(s *domain.Plant) (*domain.Plant, error)
 	GetAll() ([]*domain.Plant, error)
-	GetOne(ident string) (*domain.Plant, error)
+	GetOne(ident string) (string, error)
 }
 
 type PlantService struct{
@@ -41,10 +41,10 @@ func (s *PlantService) GetAll() ([]*domain.Plant, error){
 	return plants, err
 }
 
-func (s *PlantService) GetOne(ident string) (*domain.Plant, error){
+func (s *PlantService) GetOne(ident string) (string, error){
 	plant, err := s.plantRepository.GetOne(ident)
 	if err != nil{
-		return nil, err
+		return "", err
 	}
 	return plant, err
 }

@@ -7,7 +7,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-	"github.com/HashimovH/homework3/pkg/domain"
+	"github.com/HashimovH/esi-homework-3/pkg/domain"
 )
 
 type PlantmRepository struct {

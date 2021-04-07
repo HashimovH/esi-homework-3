@@ -3,7 +3,7 @@ package service
 import (
 	// "encoding/json"
 	// "fmt"
-	"github.com/HashimovH/homework3/pkg/domain"
+	"github.com/HashimovH/esi-homework-3/pkg/domain"
 	// "io/ioutil"
 	// "log"
 	// "net/http"

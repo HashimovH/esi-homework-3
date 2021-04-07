@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/HashimovH/homework3/pkg/domain"
+	"github.com/HashimovH/esi-homework-3/pkg/domain"
 	"context"
 	"fmt"
 	"database/sql"

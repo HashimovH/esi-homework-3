@@ -2,7 +2,7 @@ package http
 
 import (
 	"encoding/json"
-	"github.com/HashimovH/homework3/pkg/domain"
+	"github.com/HashimovH/esi-homework-3/pkg/domain"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 	"net/http"
