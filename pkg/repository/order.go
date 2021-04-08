@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"fmt"
+	"github.com/HashimovH/esi-homework-3/pkg/domain"
 )
 
 type orderRepository struct {
@@ -28,4 +29,21 @@ func (r *orderRepository) GetStatus(ident string, start string, end string) (int
 	}
 
 	return num, nil
+}
+
+func (r *orderRepository) CreateOrder(*domain.Order) (*domain.Order, error){
+	// Create Order here
+	// return order, nil 
+}
+
+func (r *orderRepository) ListOrder() ([]*domain.Order, error){
+	// If http parameter is there, we should filter for given date orders
+	// Query: Select all
+	// return orders, nil
+	return ""
+}
+
+func (r *orderRepository) CancelOrder(id int) (string, error){
+	// Query to mark order cancelled
+	// return response
 }

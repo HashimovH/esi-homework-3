@@ -19,7 +19,7 @@ import (
 	// https://www.calhoun.io/why-we-import-sql-drivers-with-the-blank-identifier/
 	// The sql package must be used in conjunction with a database driver. In this case PostgreSQL driver.
 	// See https://golang.org/s/sqldrivers for a list of drivers.
-	// _ "github.com/lib/pq"
+	_ "github.com/lib/pq"
 	// "encoding/json"
 )
 
