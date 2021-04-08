@@ -28,6 +28,7 @@ func NewPlantHandler(pS plantService) *plantHandler {
 func (h *plantHandler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/plant", h.Create).Methods(http.MethodPost)
 	router.HandleFunc("/plant", h.GetAll).Methods(http.MethodGet)
+	// router.HandleFunc("/mark/:id", h.MarkOrder).Methods(http.MethodPost)
 	
 	//router.HandleFunc("/price", h.GetPrice).Methods(http.MethodPost)
 }
