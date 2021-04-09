@@ -3,17 +3,16 @@ package domain
 import (
 	"time"
 	_ "github.com/jinzhu/gorm"
+	"gorm.io/gorm"
+	
 )
 
 type Order struct {
-	ID        int `gorm:"primary_key;type:int;"`
-	Ident     string
-	Name      string
+	gorm.Model
 	Price     float64
-	Start     string
-	End       string
-	CreatedAt time.Time
-	Plant []Plant `gorm:"ForeignKey:ID"`
+	Start     time.Time
+	End       time.Time
+	Plant Plant `gorm:"ForeignKey:ID"`
+	PlantID int
 	Status    bool
-	Delivered bool
 }

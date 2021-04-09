@@ -1,14 +1,16 @@
 package domain
 
 import (
-	"time"
+	// "time"
+	"gorm.io/gorm"
 )
 
 type Plant struct {
-	ID        int `json:"id"`
-	Ident     string `json:"ident"`
+	gorm.Model
+	// ID        int `json:"id"`
+	// Ident     string `json:"ident"`
 	Name      string `json:"name"`
 	Price     float64 `json:"price"`
 	Status    bool `json:"status"`
-	CreatedAt time.Time `json:"createdAt"`
+	// CreatedAt time.Time `json:"createdAt"`
 }
