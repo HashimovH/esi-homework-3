@@ -9,4 +9,6 @@ require (
 	github.com/satori/go.uuid v1.2.0
 	github.com/sirupsen/logrus v1.4.2
 	go.mongodb.org/mongo-driver v1.5.1
+	gorm.io/driver/postgres v1.0.8 // indirect
+	gorm.io/gorm v1.21.6
 )

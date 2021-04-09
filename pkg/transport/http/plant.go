@@ -12,7 +12,7 @@ import (
 type plantService interface {
 	Create(plant *domain.Plant) (*domain.Plant, error)
 	GetAll() ([]*domain.Plant, error)
-	GetOne(ident string) (string, error)
+	GetOne(ident string) (float64, error)
 }
 
 type plantHandler struct {

@@ -6,13 +6,16 @@ import (
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 	"net/http"
+	"time"
+	"strconv"
 )
 
 type OrderService interface {
-	GetStatus(i string, s string, e string) (int, error)
+	GetStatus(i string, s string, e string) (int64, error)
 	CreateOrder(*domain.Order) (*domain.Order, error)
-	ListOrder() ([]*domain.Order, error)
-	CancelOrder(id int) (*domain.Order, error)
+	ListOrder(due time.Time) ([]*domain.Order, error)
+	CancelOrder(id int) (string, error)
+	UpdateOrder(id int, start time.Time, end time.Time) (*domain.Order, error)
 }
 
 type orderHandler struct {
@@ -29,8 +32,35 @@ func (h *orderHandler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/status", h.GetStatus).Methods(http.MethodPost)
 	router.HandleFunc("/order", h.CreateOrder).Methods(http.MethodPost) // Create Order
 	router.HandleFunc("/order", h.ListOrder).Methods(http.MethodGet) // Create Order
-	// router.HandleFunc("/order-delivery", h.OrderDelivery).Methods(http.MethodPost) // Find orders for given data
+	router.HandleFunc("/order/update/{id}", h.UpdateOrder).Methods(http.MethodPost) // Find orders for given data
 	router.HandleFunc("/cancel/:id", h.CancelOrder).Methods(http.MethodGet) // Cancel order if it is not delivered yet
+}
+
+
+func (h *orderHandler) UpdateOrder(w http.ResponseWriter, r *http.Request){
+	vars := mux.Vars(r)
+	id := vars["id"]
+	start := r.FormValue("start")
+	end := r.FormValue("end")
+	i, err := strconv.Atoi(id)
+	layout := "2006-01-02"
+	st, err := time.Parse(layout, start)
+	en, err := time.Parse(layout, end)
+
+	
+	order, err := h.OrderService.UpdateOrder(i, st, en)
+	
+	if err != nil {
+		log.Error(err.Error())
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// write success response
+	w.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(w).Encode(&order)
+	if err != nil {
+		log.Errorf("Could not encode json, err %v", err)
+	}
 }
 
 func (h *orderHandler) CreateOrder(w http.ResponseWriter, r *http.Request){
@@ -47,7 +77,7 @@ func (h *orderHandler) CreateOrder(w http.ResponseWriter, r *http.Request){
 		log.Errorf("Could not close request body, err %v", err)
 	}
 
-	createdOrder, err := h.orderService.CreateOrder(order)
+	createdOrder, err := h.OrderService.CreateOrder(order)
 	if err != nil {
 		log.Error(err.Error())
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -63,7 +93,12 @@ func (h *orderHandler) CreateOrder(w http.ResponseWriter, r *http.Request){
 }
 
 func (h *orderHandler) ListOrder(w http.ResponseWriter, r *http.Request){
-	orders, err := h.orderService.ListOrder()
+	vars := mux.Vars(r)
+	due := vars["due"]
+	layout := "2006-01-02"
+	du, err := time.Parse(layout, due)
+	orders, err := h.OrderService.ListOrder(du)
+	
 	if err != nil {
 		log.Error(err.Error())
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -89,14 +124,18 @@ func (h *orderHandler) CancelOrder(w http.ResponseWriter, r *http.Request){
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
-	order, err = h.OrderService.CancelOrder(i)
+	var message string;
+	message, err = h.OrderService.CancelOrder(i)
 	if err != nil {
 		log.Error(err.Error())
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	w.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(w).Encode(&message)
+	if err != nil {
+		log.Errorf("Could not encode json, err %v", err)
+	}
 }
 
 

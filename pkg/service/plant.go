@@ -16,7 +16,7 @@ type plantRepository interface {
 	// cacheRepository  *repository.CacheRepository
 	Create(s *domain.Plant) (*domain.Plant, error)
 	GetAll() ([]*domain.Plant, error)
-	GetOne(ident string) (string, error)
+	GetOne(ident string) (float64, error)
 }
 
 type PlantService struct{
@@ -41,10 +41,10 @@ func (s *PlantService) GetAll() ([]*domain.Plant, error){
 	return plants, err
 }
 
-func (s *PlantService) GetOne(ident string) (string, error){
+func (s *PlantService) GetOne(ident string) (float64, error){
 	plant, err := s.plantRepository.GetOne(ident)
 	if err != nil{
-		return "", err
+		return 0, err
 	}
 	return plant, err
 }
